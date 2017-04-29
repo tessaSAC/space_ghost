@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "agenda": "^0.9.1",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "mongodb": "^2.2.26",
     "twilio": "^2.11.1"
   },
   "scripts": {
