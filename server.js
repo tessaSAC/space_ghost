@@ -12,15 +12,10 @@ app.get('/', function (req, res) {
 
 app.post('/', function(req, res) {
     const twiml = new twilio.TwimlResponse();
-    if (req.body.Body == 'hello') {
-        twiml.message('Hi!');
-    } else if(req.body.Body == 'bye') {
-        twiml.message('bye');
-    } else {
-		twiml.message(function() {
-			this.body(req.body.Body);
-		});
-    }
+	twiml.message(function() {
+		this.body(req.body.Body);
+	});
+
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
 });
