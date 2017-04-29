@@ -10,10 +10,10 @@ class App extends Component {
 
     return (
       <div className="App">
-        <form action="">
-          <input type="text" />
-          <button type="submit"></button>
-        </form>
+        <form action="/spaceghost" method="post">
+            <input type="text" name="textmsg">
+            <button type="submit">send message</button>
+          </form>
       </div>
     );
   }
