@@ -15,9 +15,11 @@ app.post('/', function(req, res) {
     if (req.body.Body == 'hello') {
         twiml.message('Hi!');
     } else if(req.body.Body == 'bye') {
-        twiml.message('Goodbye');
+        twiml.message('bye');
     } else {
-        twiml.message('No Body param match, Twilio sends this in the request to your server.');
+		twiml.message(function() {
+			this.body(req.body.Body);
+		});
     }
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
