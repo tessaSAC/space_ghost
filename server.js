@@ -7,7 +7,7 @@ const http = require('http'),
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.sendFile(`${ __dirname }/index.html`);
 })
 
 app.post('/', function(req, res) {
@@ -22,4 +22,4 @@ app.post('/', function(req, res) {
 
 app.listen(2001, function () {
   console.log('Example app listening on port 2001!');
-})
+});
