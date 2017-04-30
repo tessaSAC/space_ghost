@@ -12,8 +12,10 @@ const http = require('http'),
       twilioNumber = cfg.twilioNumber,
       client = twilio(accountSid, authToken);
 
-app.use(express.static('./app'));
+app.use(express.static(`${ __dirname }/app`));
+// app.use(express.static(`${ __dirname }/../node_modules`));
 
+app.use(bodyParser.json()); // handle json data
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '../public')))
@@ -28,36 +30,26 @@ app.post('/', function(req, res) {
       from: twilioNumber,
       body: req.body.Body
   }, function(error, message) {
-      if (!error) {
-             // The second argument to the callback will contain the information
-             // sent back by Twilio for the request. In this case, it is the
-             // information about the text messsage you just sent:
-             console.log('Success! The SID for this SMS message is:');
-             console.log(message.sid);
+    if (!error) {
+      console.log('Success! The SID for this SMS message is:');
+      console.log(message.sid);
 
-             console.log('Message sent on:');
-             console.log(message.dateCreated);
-         } else {
-             console.log('Oops! There was an error.', message);
-         }
+      console.log('Message sent on:');
+      console.log(message.dateCreated);
+    } else {
+      console.log('Oops! There was an error.', message);
+    }
   });
 });
 
 app.post('/spaceghost', function(req, res) {
- //    const twiml = new twilio.TwimlResponse();
-    // twiml.message(function() {
-    //  this.body('hi');
-    // });
-
- //    res.writeHead(200, {'Content-Type': 'text/xml'});
- //    res.end(twiml.toString());
-
- //    console.log(req.body.textmsg)
+  console.log('I hit the route!')
+  console.log('REQUEST', req.body);
 
   client.sms.messages.create({
       to: ghostee,
       from: twilioNumber,
-      body: req.body.textmsg
+      body: req.body.Body
   }, function(error, message) {
       if (!error) {
              console.log('Success! The SID for this SMS message is:');

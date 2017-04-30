@@ -1,22 +1,52 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class extends Component {
 
   constructor() {
     super()
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(e) {
+    console.log('hi')
+     e.preventDefault();
+     const newTextMsg = e.target.textmsg.value;
+     e.target.textmsg.value = '';
+     console.log(newTextMsg);
+
+    axios.post('/spaceghost', {
+      Body: newTextMsg
+    })
+    .then(() => console.log('i posted!'))
+    .catch(console.error);
   }
 
   render() {
-    function test() {
-      alert('hi');
-    }
-
     return (
       <div className="App">
-        <form action="/spaceghost" method="post">
-            <input type="text" name="textmsg" />
-            <button type="submit">send message</button>
-        </form>
+        <div className="container">
+          <div className="row">
+            <div className="col s6">
+              <form action="/spaceghost" method="post" onSubmit={this.handleSubmit}>
+                <div className="row">
+                  <div className="col s10">
+                    <input  id="textmsg" type="text" name="textmsg" />
+                  </div>
+                  <div className="col s1 push-s1">
+                    <button className="waves-effect waves-circle waves-light btn-floating secondary-content purple" type="submit" name="action">
+                        <i className="material-icons right">send</i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div className="col s6">
+              <ul className="collection">
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
