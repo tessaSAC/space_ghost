@@ -7,10 +7,12 @@ const http = require('http'),
       cfg = require('../config'),
       accountSid = cfg.accountSid,
       authToken = cfg.authToken,
-      casper = cfg.casper,
-      ghostee = cfg.ghostee,
+      user = cfg.user,
+      sender = cfg.sender,
       twilioNumber = cfg.twilioNumber,
-      client = twilio(accountSid, authToken);
+      client = twilio(accountSid, authToken),
+      senderMessages = [];
+let numPreviousMessages = 0;
 
 app.use(express.static(path.join(__dirname , '/app')));
 
@@ -25,11 +27,29 @@ app.get('/assets/gus.png', (req, res) => res.sendFile(path.join(__dirname, '../a
 //   res.sendFile(path.join(__dirname, '/index.html'))
 // })
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'));
+})
+
+app.get('/messageInbox', (req, res) => {
+  // console.log(numPreviousMessages, senderMessages.length)
+  // if (numPreviousMessages !== senderMessages.length) {
+  //   res.send(senderMessages.slice(numPreviousMessages));
+  //   numPreviousMessages = senderMessages.length;
+  // }
+  // else res.send(null);
+  // console.log('sending messages');
+  res.send(senderMessages);
+});
 
 app.post('/', function(req, res) {
+  // console.log(numPreviousMessages, senderMessages.length)
+  senderMessages.push(req.body);
+  // console.log('numMessages in inbox:', senderMessages.length);
+  // console.log(numPreviousMessages, senderMessages.length)
+
   client.sms.messages.create({
-      to: casper,
+      to: user,
       from: twilioNumber,
       body: req.body.Body
   }, function(error, message) {
@@ -50,7 +70,7 @@ app.post('/spaceghost', function(req, res) {
   console.log('REQUEST', req.body);
 
   client.sms.messages.create({
-      to: ghostee,
+      to: sender,
       from: twilioNumber,
       body: req.body.Body
   }, function(error, message) {

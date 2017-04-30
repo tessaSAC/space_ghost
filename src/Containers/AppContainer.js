@@ -8,6 +8,7 @@ export default class extends Component {
 
   constructor() {
     super()
+    this.numSenderMessages = 0;
     this.pushToConvo = this.pushToConvo.bind(this);
 
     this.state = {
@@ -21,13 +22,43 @@ export default class extends Component {
     }
   }
 
+
+  checkForMessages() {
+    axios.get('/messageInbox')
+    .then(response => response.data)
+    .then(backendMessageArray => {
+      console.log('checking for new messages...');
+      console.log(backendMessageArray)
+      if (backendMessageArray !== "") {
+        if (backendMessageArray.length > this.numSenderMessages) {
+          const newMessages = backendMessageArray.slice(this.numSenderMessages);
+          for (let i = 0; i < newMessages.length; ++i) {
+            console.log(newMessages[i]);
+          }
+          this.numSenderMessages = backendMessageArray.length
+        };
+      }
+
+      // if (backendMessageArray.length > this.numSenderMessages) {
+      //   // for (let i = this.numSenderMessage; i < backendMessageArray.length; ++i) {
+      //   // }
+      //   console.log(backendMessageArray);
+      //   this.numSenderMessages = backendMessageArray.length;
+      // }
+    });
+  }
+
   pushToConvo(newMessage) {
+    console.log("I'm pushing it!!", newMessage);
     const newState = Object.assign({}, this.state, {
       allMessages: this.state.allMessages.concat(newMessage)
     })
     this.setState(newState);
   }
 
+  componentDidMount(){
+    window.setInterval(this.checkForMessages, 500)
+  }
 
   render() {
     const style = {
