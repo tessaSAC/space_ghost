@@ -2,20 +2,27 @@
   "name": "space_ghost",
   "version": "0.1.0",
   "private": true,
+  "main": "server/",
+  "scripts": {
+    "start": "nodemon server/",
+    "build": "webpack -w"
+  },
+  "author": "Harmony Dashut",
+  "license": "ISC",
   "dependencies": {
+    "axios": "^0.15.3",
     "body-parser": "^1.17.1",
-    "express": "^4.15.2",
+    "express": "^4.15.0",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "react-dom": "^15.4.2",
     "twilio": "^2.11.1"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.23.0",
+    "nodemon": "^1.11.0",
+    "webpack": "^2.2.1"
   }
 }
