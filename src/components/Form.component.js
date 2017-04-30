@@ -17,7 +17,7 @@ export default class extends Component {
 
     this.props.pushToConvo({
       direction: 'fromUser',
-      senderName: 'gus',
+      senderName: 'me',
       message: newTextMsg
     });
 

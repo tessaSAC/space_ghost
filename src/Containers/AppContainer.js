@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import FriendsMessageComponent from '../components/FriendsMessage.component';
-import UserMessageComponent from '../components/UserMessage.component';
+import MessageComponent from '../components/Message.component';
 import FormComponent from '../components/Form.component'
 import axios from 'axios';
 
@@ -9,14 +8,20 @@ export default class extends Component {
   constructor() {
     super()
     this.numSenderMessages = 0;
+    this.checkForMessages = this.checkForMessages.bind(this);
     this.pushToConvo = this.pushToConvo.bind(this);
 
     this.state = {
       allMessages: [
         {
           direction: 'toUser',
-          senderName: 'gus',
-          message: 'did you hear about pluto'
+          senderName: 'Gus',
+          message: 'Did you hear about Pluto?'
+        },
+        {
+          direction: 'toUser',
+          senderName: 'Gus',
+          message: 'That\'s messed up, right?'
         }
       ]
     }
@@ -28,16 +33,17 @@ export default class extends Component {
     .then(response => response.data)
     .then(backendMessageArray => {
       console.log('checking for new messages...');
-      console.log(backendMessageArray)
-      if (backendMessageArray !== "") {
-        if (backendMessageArray.length > this.numSenderMessages) {
-          const newMessages = backendMessageArray.slice(this.numSenderMessages);
-          for (let i = 0; i < newMessages.length; ++i) {
-            console.log(newMessages[i]);
-          }
-          this.numSenderMessages = backendMessageArray.length
-        };
-      }
+      if (backendMessageArray.length > this.numSenderMessages) {
+        const newMessages = backendMessageArray.slice(this.numSenderMessages);
+        for (let i = 0; i < newMessages.length; ++i) {
+          this.pushToConvo({
+            direction: 'toUser',
+            senderName: 'Gus',
+            message: newMessages[i].Body
+          });
+        }
+        this.numSenderMessages = backendMessageArray.length
+      };
 
       // if (backendMessageArray.length > this.numSenderMessages) {
       //   // for (let i = this.numSenderMessage; i < backendMessageArray.length; ++i) {
@@ -65,11 +71,6 @@ export default class extends Component {
       backgroundColor: '#311b92'
     };
 
-    const sender = {
-      name: 'gus',
-      message: 'hey'
-    }
-
     return (
       <div className="App" style={style}>
         <div className="container">
@@ -79,13 +80,9 @@ export default class extends Component {
             <div className="col s6">
               <ul className="collection">
                 { this.state.allMessages && this.state.allMessages
-                  .filter(message => (message.direction === 'toUser'))
-                  .map((message, idx) => <FriendsMessageComponent key={idx} message={message} />)
+                  .map((message, idx) => <MessageComponent key={idx} message={message} />)
                 }
-                { this.state.allMessages && this.state.allMessages
-                  .filter(message => (message.direction === 'fromUser'))
-                  .map((message, idx) => <UserMessageComponent key={idx} message={message} />)
-                }
+
               </ul>
               <hr />
               <FormComponent pushToConvo={this.pushToConvo} />
@@ -96,3 +93,10 @@ export default class extends Component {
     );
   }
 }
+
+
+// Old other component
+// { this.state.allMessages && this.state.allMessages
+//   .filter(message => (message.direction === 'fromUser'))
+//   .map((message, idx) => <UserMessageComponent key={idx} message={message} />)
+// }
