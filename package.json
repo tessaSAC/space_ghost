@@ -7,7 +7,7 @@
     "start": "nodemon server/",
     "build": "webpack -w"
   },
-  "author": "Harmony Dashut",
+  "author": "Harmony Dashut, Tessa Park",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.15.3",
