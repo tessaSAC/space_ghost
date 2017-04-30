@@ -4,7 +4,7 @@ const http = require('http'),
       app = express(),
       twilio = require('twilio'),
       bodyParser = require('body-parser'),
-      cfg = require('../config.js'),
+      cfg = require('../config'),
       accountSid = cfg.accountSid,
       authToken = cfg.authToken,
       casper = cfg.casper,
@@ -12,17 +12,20 @@ const http = require('http'),
       twilioNumber = cfg.twilioNumber,
       client = twilio(accountSid, authToken);
 
-app.use(express.static(`${ __dirname }/app`));
-// app.use(express.static(`${ __dirname }/../node_modules`));
+app.use(express.static(path.join(__dirname , '/app')));
 
 app.use(bodyParser.json()); // handle json data
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'))
-})
+app.get('/assets/gus.png', (req, res) => res.sendFile(path.join(__dirname, '../app/assets/gus.png')));
+
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '/index.html'))
+// })
+
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
 
 app.post('/', function(req, res) {
   client.sms.messages.create({
